@@ -208,25 +208,43 @@ class TetradBuffer: NSObject {
                                              Double(dyads[0].harmonies[0].tones[0].frequencies[0]), Double(dyads[0].harmonies[0].tones[0].frequencies[0]),
                                              Double(dyads[0].harmonies[0].tones[0].frequencies[0]), Double(dyads[0].harmonies[0].tones[0].frequencies[0])]
                 
-                channel_signals[0] = (Int.zero...22049).map { n -> Float32 in
-                    let t: Double = Double(globalTimeArray[n])
-                    let f: Double = Double(0.125) * (2.0 * sin((sin(tau * frequencies[0] * t)) + (sin(tau * frequencies[1] * t))) * cos((sin(tau * frequencies[0] * t)) - (sin(tau * frequencies[1] * t)))) / 2.0
-                    return Float32(f)
-                } + (22050..<bufferLength).map { n -> Float32 in
-                    let t: Double = Double(globalTimeArray[n])
-                    let f: Double = Double(0.125) * (2.0 * sin((sin(tau * frequencies[2] * t)) + (sin(tau * frequencies[3] * t))) * cos((sin(tau * frequencies[2] * t)) - (sin(tau * frequencies[3] * t)))) / 2.0
+                let theta_increment: Double = ((tau * frequencies[0]) / Double(bufferLength))
+                print(theta)
+                // TODO: Use phase angle instead of time function to eliminate clicking
+                channel_signals[0] = (Int.zero..<bufferLength).map { n -> Float32 in
+                    let f: Double = Double(sin(theta)) // Double(0.125) * (2.0 * sin((sin(thetas[0])) + (sin(thetas[1]))) * cos((sin(thetas[0])) - (sin(thetas[1])))) / 2.0
+                    theta += theta_increment
                     return Float32(f)
                 }
                 
-                channel_signals[1] = (Int.zero...22049).map { n -> Float32 in
-                    let t: Double = Double(globalTimeArray[n])
-                    let f: Double = Double(0.125) * (2.0 * sin((sin(tau * frequencies[0] * t)) + (sin(tau * frequencies[1] * t))) * cos((sin(tau * frequencies[0] * t)) - (sin(tau * frequencies[1] * t)))) / 2.0
-                    return Float32(f)
-                } + (22050..<bufferLength).map { n -> Float32 in
-                    let t: Double = Double(globalTimeArray[n])
-                    let f: Double = Double(0.125) * (2.0 * sin((sin(tau * frequencies[2] * t)) + (sin(tau * frequencies[3] * t))) * cos((sin(tau * frequencies[2] * t)) - (sin(tau * frequencies[3] * t)))) / 2.0
-                    return Float32(f)
-                }
+
+                channel_signals[1] = channel_signals[0]
+//                /(Int.zero...bufferLength).map { n -> Float32 in
+//                    phaseAccumulators[2] += tau * frequencies[0] * samplePeriod
+//                    phaseAccumulators[3] += tau * frequencies[1] * samplePeriod
+//                    let f: Double = Double(0.125) * (2.0 * sin((sin(phaseAccumulators[0])) + (sin(phaseAccumulators[1]))) * cos((sin(phaseAccumulators[0])) - (sin(phaseAccumulators[1])))) / 2.0
+//                    return Float32(f)
+//                }
+                
+//                channel_signals[0] = (Int.zero...22049).map { n -> Float32 in
+//                    let t: Double = Double(globalTimeArray[n])
+//                    let f: Double = Double(0.125) * (2.0 * sin((sin(tau * frequencies[0] * t)) + (sin(tau * frequencies[1] * t))) * cos((sin(tau * frequencies[0] * t)) - (sin(tau * frequencies[1] * t)))) / 2.0
+//                    return Float32(f)
+//                } + (22050..<bufferLength).map { n -> Float32 in
+//                    let t: Double = Double(globalTimeArray[n])
+//                    let f: Double = Double(0.125) * (2.0 * sin((sin(tau * frequencies[2] * t)) + (sin(tau * frequencies[3] * t))) * cos((sin(tau * frequencies[2] * t)) - (sin(tau * frequencies[3] * t)))) / 2.0
+//                    return Float32(f)
+//                }
+//                
+//                channel_signals[1] = (Int.zero...22049).map { n -> Float32 in
+//                    let t: Double = Double(globalTimeArray[n])
+//                    let f: Double = Double(0.125) * (2.0 * sin((sin(tau * frequencies[0] * t)) + (sin(tau * frequencies[1] * t))) * cos((sin(tau * frequencies[0] * t)) - (sin(tau * frequencies[1] * t)))) / 2.0
+//                    return Float32(f)
+//                } + (22050..<bufferLength).map { n -> Float32 in
+//                    let t: Double = Double(globalTimeArray[n])
+//                    let f: Double = Double(0.125) * (2.0 * sin((sin(tau * frequencies[2] * t)) + (sin(tau * frequencies[3] * t))) * cos((sin(tau * frequencies[2] * t)) - (sin(tau * frequencies[3] * t)))) / 2.0
+//                    return Float32(f)
+//                }
                 
 //                var signal1 = synthesizeSignal(frequencyAmplitudePairs: [(f: Float32(frequencies[4]), a: (0.25 * Float32.pi))], count: bufferLength / 2)  //, [Float32](repeating: 0, count: bufferLength)]
 //                var signal = synthesizeSignal(frequencyAmplitudePairs: [(f: Float32(frequencies[4]), a: (0.25 * Float32.pi))], count: bufferLength / 2)
