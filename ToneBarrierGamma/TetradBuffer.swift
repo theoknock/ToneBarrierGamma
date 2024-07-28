@@ -208,14 +208,26 @@ class TetradBuffer: NSObject {
                                              Double(dyads[0].harmonies[0].tones[0].frequencies[0]), Double(dyads[0].harmonies[0].tones[0].frequencies[0]),
                                              Double(dyads[0].harmonies[0].tones[0].frequencies[0]), Double(dyads[0].harmonies[0].tones[0].frequencies[0])]
                 
-                let theta_increment: Double = ((tau * frequencies[0]) / Double(bufferLength))
-                print(theta)
+                let theta_increment: Double = Double((tau / Double(bufferLength) * frequencies[0]))
+                print(theta_increment)
                 // TODO: Use phase angle instead of time function to eliminate clicking
-                channel_signals[0] = (Int.zero..<bufferLength).map { n -> Float32 in
+//                channel_signals[0] = (Int.zero..<bufferLength).map { n -> Float32 in
+//                    let f: Double = Double(sin(theta)) // Double(0.125) * (2.0 * sin((sin(thetas[0])) + (sin(thetas[1]))) * cos((sin(thetas[0])) - (sin(thetas[1])))) / 2.0
+//                    theta += theta_increment
+//                    return Float32(f)
+//                }
+                
+                
+                print(cos(theta))
+                
+                for n in Int.zero..<bufferLength {
                     let f: Double = Double(sin(theta)) // Double(0.125) * (2.0 * sin((sin(thetas[0])) + (sin(thetas[1]))) * cos((sin(thetas[0])) - (sin(thetas[1])))) / 2.0
                     theta += theta_increment
-                    return Float32(f)
+                    
+                    channel_signals[0][n] = Float32(f)
                 }
+                
+                print(cos(theta))
                 
 
                 channel_signals[1] = channel_signals[0]

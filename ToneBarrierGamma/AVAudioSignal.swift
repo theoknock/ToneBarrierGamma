@@ -28,6 +28,7 @@ var harmonic_:    Float32 = Float32(root_ * (3.0/2.0))
 var amplitude:    Float32 = Float32(0.25)
 var envelope:     Float32 = Float32(1.0)
 let tau:          Double  = Double(Double.pi * 2.0)
+let delta:        Double  = Double(2.0 / Double.pi)
 var theta:        Double  = Double.zero
 let trill:        Float32 = Float32.zero
 let tremolo:      Float32 = Float32(1.0)
